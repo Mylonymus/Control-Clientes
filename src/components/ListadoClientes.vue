@@ -17,10 +17,14 @@
       class="elevation-1"
       @page-count="pageCount = $event"
     >
-      <template v-slot:item.url="{ item }">
-        <v-btn text icon :href="item.url" target="_blank">
-          <v-icon>mdi-application</v-icon>
-        </v-btn>
+
+      <template v-slot:item.url="{ item }"> 
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-icon v-on="on">mdi-application</v-icon>
+          </template> 
+              <qrcode :value="item.url" :options="{ width: 200 }"></qrcode>
+        </v-tooltip>
       </template>
       <template v-slot:item.web="{ item }">
         <v-icon :color="showOn(item.web)">mdi-checkbox-blank-circle</v-icon>
@@ -31,7 +35,14 @@
       <template v-slot:item.ga="{ item }">
         <v-icon :color="showOn(item.ga)">mdi-checkbox-blank-circle</v-icon>
       </template>
-
+      <template v-slot:item.reporteMensual="{ item }"> 
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-icon v-on="on">mdi-application</v-icon>
+          </template> 
+              <qrcode :value="item.reporteMensual" :options="{ width: 200 }"></qrcode>
+        </v-tooltip>
+      </template>
       <template v-slot:item.acciones="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
         <v-icon small @click="removeCliente(item.id)">mdi-delete</v-icon>
@@ -52,9 +63,14 @@
 </template>
 
 <script>
-import BaseInputText from "./BaseInputText";
-import NuevoCliente from "./NuevoCliente";
-import { db } from "../firebase";
+import Vue from 'vue';
+import BaseInputText from "./BaseInputText"
+import NuevoCliente from "./NuevoCliente"
+import { db } from "../firebase"
+import VueQrcode from '@chenfengyuan/vue-qrcode'
+
+Vue.component(VueQrcode.name, VueQrcode);
+
 let nextClienteId = 1;
 
 export default {
